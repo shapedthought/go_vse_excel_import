@@ -81,7 +81,7 @@ func main() {
 		return
 	}
 
-	rows, _ := f.GetRows("Workload")
+	rows, _ := f.GetRows("Workloads")
 
 	// range over the rows
 	// If the row
