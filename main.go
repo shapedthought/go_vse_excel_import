@@ -81,7 +81,7 @@ func main() {
 		return
 	}
 
-	rows, _ := f.GetRows("workload")
+	rows, _ := f.GetRows("Workload")
 
 	// range over the rows
 	// If the row
@@ -114,9 +114,9 @@ func main() {
 				case 8:
 					wl.GrowthPercent, _ = strconv.Atoi(cell)
 				case 9:
-					wl.ScopeYears, _ = strconv.Atoi(cell)
-				case 10:
 					wl.BackupWindow, _ = strconv.Atoi(cell)
+				case 10:
+					wl.ScopeYears, _ = strconv.Atoi(cell)
 				case 11:
 					wl.Reduction, _ = strconv.Atoi(cell)
 				case 12:
