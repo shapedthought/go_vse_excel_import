@@ -57,6 +57,7 @@ type Settings struct {
 }
 
 type Workload struct {
+	WorkloadActive  string  `json:"workloadActive"`
 	WorkLoadName    string  `json:"workLoadName"`
 	BackupType      string  `json:"backupType"`
 	Site            string  `json:"site"`

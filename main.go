@@ -3,16 +3,19 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"github.com/briandowns/spinner"
 )
 
 func main() {
-
+	sp := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+	fmt.Println("Running...")
+	sp.Start()
 	settingsJson := `{
 		"serverMin": {
 			"vbrServer": {
@@ -94,64 +97,67 @@ func main() {
 			for i, cell := range row {
 				switch i {
 				case 0:
+					wl.WorkloadActive = cell
+				case 1:
 					wl.Site = cell
 					s = append(s, cell)
-				case 1:
+				case 2:
 					wl.CopySite = cell
 					s = append(s, cell)
-				case 2:
-					wl.WorkLoadName = cell
 				case 3:
-					wl.BackupType = cell
+					wl.WorkLoadName = cell
 				case 4:
-					wl.VMQty, _ = strconv.Atoi(cell)
+					wl.BackupType = cell
 				case 5:
-					wl.VmdkQty, _ = strconv.Atoi(cell)
+					wl.VMQty, _ = strconv.Atoi(cell)
 				case 6:
-					wl.WorkLoadCap, _ = strconv.ParseFloat(cell, 64)
+					wl.VmdkQty, _ = strconv.Atoi(cell)
 				case 7:
-					wl.ChangeRate, _ = strconv.Atoi(cell)
+					wl.WorkLoadCap, _ = strconv.ParseFloat(cell, 64)
 				case 8:
-					wl.GrowthPercent, _ = strconv.Atoi(cell)
+					wl.ChangeRate, _ = strconv.Atoi(cell)
 				case 9:
-					wl.BackupWindow, _ = strconv.Atoi(cell)
+					wl.GrowthPercent, _ = strconv.Atoi(cell)
 				case 10:
-					wl.ScopeYears, _ = strconv.Atoi(cell)
+					wl.BackupWindow, _ = strconv.Atoi(cell)
 				case 11:
-					wl.Reduction, _ = strconv.Atoi(cell)
+					wl.ScopeYears, _ = strconv.Atoi(cell)
 				case 12:
-					wl.UseReFs = cell
+					wl.Reduction, _ = strconv.Atoi(cell)
 				case 13:
+					wl.UseReFs = cell
+				case 14:
 					var check = "perVM"
 					if cell == "no" {
 						check = "perJob"
 					}
 					wl.UsePerVM = check
-				case 14:
+				case 15:
 					var check = false
 					if cell == "yes" {
 						check = true
 					}
 					wl.CloudEnabled = check
-				case 15:
-					wl.CloudMove, _ = strconv.Atoi(cell)
 				case 16:
-					wl.RpsBu, _ = strconv.Atoi(cell)
+					wl.CloudMove, _ = strconv.Atoi(cell)
 				case 17:
-					wl.BuWeekly, _ = strconv.Atoi(cell)
+					wl.RpsBu, _ = strconv.Atoi(cell)
 				case 18:
-					wl.BuMonthly, _ = strconv.Atoi(cell)
+					wl.BuWeekly, _ = strconv.Atoi(cell)
 				case 19:
-					wl.BuYearly, _ = strconv.Atoi(cell)
+					wl.BuMonthly, _ = strconv.Atoi(cell)
 				case 20:
-					wl.RpsBuCopy, _ = strconv.Atoi(cell)
+					wl.BuYearly, _ = strconv.Atoi(cell)
 				case 21:
-					wl.BuCopyWeekly, _ = strconv.Atoi(cell)
+					wl.RpsBuCopy, _ = strconv.Atoi(cell)
 				case 22:
-					wl.BuCopyMonthly, _ = strconv.Atoi(cell)
+					wl.BuCopyWeekly, _ = strconv.Atoi(cell)
 				case 23:
+					wl.BuCopyMonthly, _ = strconv.Atoi(cell)
+				case 24:
 					wl.BuCopyYearly, _ = strconv.Atoi(cell)
 				}
+				wl.ProcessCapacity = wl.WorkLoadCap
 			}
 			wls = append(wls, wl)
 		}
@@ -181,10 +187,12 @@ func main() {
 
 	file, _ := json.MarshalIndent(vseInput, "", " ")
 
-	err = ioutil.WriteFile("vse_input_file.txt", file, 0644)
+	err = os.WriteFile("vse_input_file.txt", file, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
+	sp.Stop()
+	fmt.Println("Done! Saved to vse_input_file.txt")
 }
 
 func removeDuplicateValues(intSlice []string) []string {

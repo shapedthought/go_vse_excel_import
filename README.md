@@ -1,5 +1,9 @@
 # GO VSE Excel Import
 
+UPDATES:
+
+- Updated to take account of the VSE v4 change which added the "active" field to the Excel output.
+
 This program allows you to fill in the Excel template (included) with all your workloads and then converts it into a VSE compatible workload txt file.
 
 Simply fill in the fields using lower case on any yes/no fields, then run the exe with:
